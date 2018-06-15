@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@using Pool.CustomAuthentication
+
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -17,6 +19,24 @@
                     <span class="icon-bar"></span>
                 </button>
                 @Html.ActionLink("Pool", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+            </div>
+            <div class="navbar-collapse collapse">
+                @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <ul class="nav navbar-nav navbar-right">
+                            @if (HttpContext.Current.User.Identity.IsAuthenticated)
+                            {
+                                var identity = ((CustomPrincipal)HttpContext.Current.User);
+                                <li>
+                                    @Html.Label(string.Format(identity.Username), new { @class = "navbar-brand" })
+                                </li>
+                                <li>
+                                    @Html.ActionLink("Log out", "LogOut", "Account")
+                                </li>
+                            }
+                    </ul>
+                }
             </div>
         </div>
     </div>
