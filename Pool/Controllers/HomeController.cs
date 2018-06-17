@@ -1,4 +1,6 @@
 ﻿using Pool.CustomAuthentication;
+using Pool.Models;
+using Pool.Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,13 +19,18 @@ namespace Pool.Controllers
         [CustomAuthorize(Roles = "Employee")]
         public ActionResult Reservations()
         {
-            return View();
+            var reservations = ReservationsManager.GetReservations();
+            return View(reservations);
         }
 
         [CustomAuthorize(Roles = "Visitor")]
         public ActionResult ReserveTable()
         {
-            return View();
+            var freeTables = ReservationsManager.GetFreeTables();
+            var selectOptions = freeTables.Select(f => new SelectListItem { Text = f.TableName, Value = f.TableID.ToString() }).ToList();
+            var tablesPackage = new TablesPackage("", selectOptions);
+
+            return View(tablesPackage);
         }
     }
 }

@@ -1,7 +1,32 @@
-﻿@{
+﻿@model IEnumerable<Pool.Models.ReservationsViewModel>
+
+@{
     ViewBag.Title = "Home";
 }
 
-<div>
-    <h1>Reservations</h1>
+<div class="jumbotron">
+    <h3>Reservations</h3>
+</div>
+
+
+<div class="row">
+    <table class="clients-table">
+        <tr>
+            <th>Table name</th>
+            <th>Visitor</th>
+            <th>Time</th>
+        </tr>
+
+        @if (Model != null && Model.Count() > 0)
+        {
+            foreach (var reservation in Model)
+            {
+                <tr>
+                    <td>@reservation.TableName</td>
+                    <td>@reservation.Visitor</td>
+                    <td>@reservation.Time</td>
+                </tr>
+            }
+        }
+    </table>
 </div>

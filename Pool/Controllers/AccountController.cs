@@ -65,21 +65,14 @@ namespace Pool.Controllers
                         Response.Cookies.Add(faCookie);
                     }
 
-                    if (Url.IsLocalUrl(ReturnUrl))
+                    switch(user.RoleID)
                     {
-                        return Redirect(ReturnUrl);
-                    }
-                    else
-                    {
-                        switch(user.RoleID)
-                        {
-                            case (int)eRole.Employee:
-                                return RedirectToAction("Reservations", "Home");
-                            case (int)eRole.Visitor:
-                                return RedirectToAction("ReserveTable", "Home");
-                            default:
-                                break;
-                        }
+                        case (int)eRole.Employee:
+                            return RedirectToAction("Reservations", "Home");
+                        case (int)eRole.Visitor:
+                            return RedirectToAction("ReserveTable", "Home");
+                        default:
+                            break;
                     }
                 }
             }

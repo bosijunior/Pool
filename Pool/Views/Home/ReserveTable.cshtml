@@ -1,7 +1,13 @@
-﻿@{
+﻿@model Pool.Models.TablesPackage
+
+@{
     ViewBag.Title = "Home";
 }
 
 <div>
     <h1>Reserve table</h1>
+
+    <div class="row">
+         @Html.DropDownListFor(model => model.SelectedItem, Model.Tables)
+    </div>
 </div>
