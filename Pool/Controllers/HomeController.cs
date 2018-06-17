@@ -9,14 +9,19 @@ namespace Pool.Controllers
 {
     public class HomeController : Controller
     {
-        //[CustomAuthorize(Roles = "Employee")]
         public ActionResult Index()
         {
             return View();
         }
 
+        [CustomAuthorize(Roles = "Employee")]
+        public ActionResult Reservations()
+        {
+            return View();
+        }
+
         [CustomAuthorize(Roles = "Visitor")]
-        public ActionResult Index2()
+        public ActionResult ReserveTable()
         {
             return View();
         }

@@ -71,7 +71,15 @@ namespace Pool.Controllers
                     }
                     else
                     {
-                        return RedirectToAction("Index", "Home");
+                        switch(user.RoleID)
+                        {
+                            case (int)eRole.Employee:
+                                return RedirectToAction("Reservations", "Home");
+                            case (int)eRole.Visitor:
+                                return RedirectToAction("ReserveTable", "Home");
+                            default:
+                                break;
+                        }
                     }
                 }
             }
