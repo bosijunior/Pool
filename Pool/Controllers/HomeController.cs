@@ -19,18 +19,38 @@ namespace Pool.Controllers
         [CustomAuthorize(Roles = "Employee")]
         public ActionResult Reservations()
         {
-            var reservations = ReservationsManager.GetReservations();
+            var reservations = ReservationsManager.GetReservations().OrderBy(o => o.Time);
             return View(reservations);
         }
 
         [CustomAuthorize(Roles = "Visitor")]
         public ActionResult ReserveTable()
         {
-            var freeTables = ReservationsManager.GetFreeTables();
-            var selectOptions = freeTables.Select(f => new SelectListItem { Text = f.TableName, Value = f.TableID.ToString() }).ToList();
-            var tablesPackage = new TablesPackage("", selectOptions);
+            return View(GetReserveTablesViewData());
+        }
 
-            return View(tablesPackage);
+        [HttpPost]
+        public ActionResult ReserveTable(TablesViewModel tablesView)
+        {
+            if (tablesView.SelectedDate == null)
+            {
+                ModelState.AddModelError("", "Date cannot be null");
+                return View(GetReserveTablesViewData());
+            }
+
+            ReservationsManager.CreateReservation(tablesView);
+
+            return View(GetReserveTablesViewData());
+        }
+
+        private TablesViewModel GetReserveTablesViewData()
+        {
+            List<SelectListItem> selectOptions = new List<SelectListItem>();
+
+            var freeTables = ReservationsManager.GetFreeTables();
+            freeTables.ForEach(x => selectOptions.Add(new SelectListItem { Text = x.Name, Value = x.PoolTableID.ToString() }));
+
+            return new TablesViewModel(0, DateTime.Now, selectOptions);
         }
     }
 }

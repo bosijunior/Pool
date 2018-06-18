@@ -16,6 +16,33 @@
     white-space: normal;
 }
 
+.clients-table {
+    border: 1px solid #999;
+}
+
+.clients-table tr {
+    border-bottom: 1px solid #999;
+}
+
+.clients-table th {
+    padding: 5px;
+    text-align: center;
+    border-right: 1px solid #999;
+}
+
+.clients-table td {
+    padding: 5px;
+    border-left: 1px solid #999;
+}
+
+.clients-table tr td:first-child, .clients-table tr th:first-child {
+    width: 10%;
+}
+
+.clients-table tr td, .clients-table tr th {
+    width: 23%;
+}
+
 /* Set width on the form input elements since they're 100% wide by default */
 input,
 select,

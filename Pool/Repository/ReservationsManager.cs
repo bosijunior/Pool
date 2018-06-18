@@ -1,9 +1,11 @@
-﻿using Pool.DataAccess;
+﻿using Pool.CustomAuthentication;
+using Pool.DataAccess;
 using Pool.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Security;
 
 namespace Pool.Repository
 {
@@ -31,18 +33,34 @@ namespace Pool.Repository
             return reservationsList;
         }
 
-        public static List<TablesViewModel> GetFreeTables()
+        public static List<PoolTable> GetFreeTables()
         {
-            List<TablesViewModel> freeTables = new List<TablesViewModel>();
 
-            using(DatabaseModel model = new DatabaseModel())
+            using (DatabaseModel model = new DatabaseModel())
             {
-                var tables = model.PoolTables.Where(x => x.IsOccupied == false).ToList();
-
-                tables.ForEach(x => freeTables.Add(new TablesViewModel() { TableID = x.PoolTableID, TableName = x.Name }));
+                return model.PoolTables.Where(x => x.IsOccupied == false).ToList();
             }
+        }
 
-            return freeTables;
+        public static void CreateReservation(TablesViewModel tablesViewModel)
+        {
+            using (DatabaseModel model = new DatabaseModel())
+            {
+                var currentUsername = HttpContext.Current.User.Identity.Name;
+                var user = (CustomMembershipUser)Membership.GetUser(currentUsername, false);
+
+                // add new reservation
+                model.Reservations.Add(new Reservation { UserID = user.UserId, PoolTableID = tablesViewModel.SelectedTableID, ReservationTime = tablesViewModel.SelectedDate });
+
+                // update table occupation
+                var selectedtable = model.PoolTables.FirstOrDefault(x => x.PoolTableID == tablesViewModel.SelectedTableID);
+                if(selectedtable != null)
+                {
+                    selectedtable.IsOccupied = true;
+                }
+
+                model.SaveChanges();
+            }
         }
     }
 }

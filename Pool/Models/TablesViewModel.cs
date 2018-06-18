@@ -9,22 +9,22 @@ namespace Pool.Models
 {
     public class TablesViewModel
     {
-        [Display(Name = "Table ID")]
-        public int TableID { get; set; }
+        public int SelectedTableID { get; set; }
 
-        [Display(Name = "Table name")]
-        public string TableName { get; set; }
-    }
+        [Display(Name = "Reservation time")]
+        public DateTime SelectedDate { get; set; }
 
-    public class TablesPackage
-    {
-        public string SelectedItem { get; set; }
 
+        [Display(Name = "Free tables")]
         public ICollection<SelectListItem> Tables { get; set; }
 
-        public TablesPackage(string selectedItem, List<SelectListItem> tables)
+
+        public TablesViewModel() { }
+
+        public TablesViewModel(int selectedTableID, DateTime selectedDate, List<SelectListItem> tables)
         {
-            SelectedItem = selectedItem;
+            SelectedTableID = selectedTableID;
+            SelectedDate = selectedDate;
             Tables = tables;
         }
     }
