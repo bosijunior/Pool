@@ -1,7 +1,24 @@
-﻿@{
+﻿@using Pool.CustomAuthentication
+@using Pool.Models
+
+@{
     ViewBag.Title = "Home";
 }
 
 <div>
-    <h1>Welcome</h1>
+    <h3>Welcome</h3>
+
+    @if (HttpContext.Current.User.Identity.IsAuthenticated)
+    {
+        var identity = ((CustomPrincipal)HttpContext.Current.User);
+
+        if (identity.Role == eRole.Visitor.ToString())
+        {
+            @Html.ActionLink("Go to tables", "ReserveTable", "Home")
+        }
+        else
+        {
+            @Html.ActionLink("Go to reservations", "Reservations", "Home")
+        }
+    }
 </div>

@@ -29,6 +29,7 @@ namespace Pool.Controllers
             return View(GetReserveTablesViewData());
         }
 
+        [CustomAuthorize(Roles = "Visitor")]
         [HttpPost]
         public ActionResult ReserveTable(TablesViewModel tablesView)
         {
